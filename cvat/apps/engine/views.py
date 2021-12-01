@@ -895,6 +895,9 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
         db_task = self.get_object() # force to call check_object_permissions
 
         format_name = request.query_params.get("format", "")
+        # may add a if condition so that annotator could not have the capability to download
+        return Response(status=status.HTTP_403_FORBIDDEN) 
+```
         return _export_annotations(db_instance=db_task,
             rq_id="/api/v1/tasks/{}/dataset/{}".format(pk, format_name),
             request=request,
@@ -903,6 +906,7 @@ class TaskViewSet(auth.TaskGetQuerySetMixin, viewsets.ModelViewSet):
             format_name=format_name,
             filename=request.query_params.get("filename", "").lower(),
         )
+```
 
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(operation_summary='Method returns details of a job'))
 @method_decorator(name='update', decorator=swagger_auto_schema(operation_summary='Method updates a job by id'))
